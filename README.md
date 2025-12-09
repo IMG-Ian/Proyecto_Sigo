@@ -3,6 +3,7 @@ Medina Galvan Ian Antonio
 Guzmán Hernández Santiago
 López Bautista Leonardo Tristán
 González Cabrera Karen Denis
+Lemus García Adrián
 
 SIGO es la aplicación móvil institucional de la universidad que permite a los estudiantes consultar su información académica, su perfil personal y sus materias inscritas, mediante un acceso seguro con matrícula y contraseña.
 
