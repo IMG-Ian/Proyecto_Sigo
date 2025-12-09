@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Objeto singleton para crear y configurar una instancia de Retrofit.
  */
 object RetrofitClient {
-    private const val BASE_URL = "http://189.206.96.198:8080/"
+    private const val BASE_URL = "http://prometheus.utmorelia.edu.mx:8080/"
 
     /**
      * Instancia de Retrofit configurada con la URL base y un convertidor de Gson.
