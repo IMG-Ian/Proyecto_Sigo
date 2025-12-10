@@ -26,7 +26,6 @@ fun ProfileScreen(
     navController: NavController
 ) {
 
-    // ✅ ESTADOS (API + PROTOTIPO)
     var nombre by remember { mutableStateOf(user.personFullName) }
     var curp by remember { mutableStateOf("") }
     var nss by remember { mutableStateOf("") }
@@ -61,7 +60,6 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-            // ✅ ENCABEZADO
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
@@ -89,7 +87,6 @@ fun ProfileScreen(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // ✅ DATOS SOLO LECTURA (API)
             ReadOnlyRow("Perfil", user.profileName)
             ReadOnlyRow("Usuario", user.username)
             ReadOnlyRow("Correo", user.email)
@@ -98,7 +95,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ✅ TITULO SECCIÓN
             Text(
                 text = "Información Personal",
                 fontWeight = FontWeight.Bold,
@@ -108,7 +104,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // ✅ CAMPOS EDITABLES
             ProfileTextField("Nombre completo", nombre) { nombre = it }
             ProfileTextField("CURP", curp) { curp = it }
             ProfileTextField("Número de Seguridad Social", nss) { nss = it }
@@ -133,7 +128,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // ✅ BOTÓN GUARDAR (PROTOTIPO)
             Button(
                 onClick = {
                     println("Nombre: $nombre")
@@ -157,10 +151,6 @@ fun ProfileScreen(
 }
 
 
-
-// ======================
-// ✅ COMPONENTES REUTILIZABLES
-// ======================
 
 @Composable
 fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Unit) {
