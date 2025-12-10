@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,11 +25,54 @@ import com.example.loginsigo.ui.theme.UtmGreenPrimary
 fun DashboardScreen(
     user: UserResponse,
     onNavigateToHistory: () -> Unit,
-    onNavigateToProfile: () -> Unit
+    onNavigateToProfile: () -> Unit,
+    onLogout: () -> Unit // Parámetro necesario para el menú
 ) {
+    // Estado para controlar el menú desplegable
+    var showMenu by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
+                // --- MENÚ DE HAMBURGUESA (IZQUIERDA) ---
+                navigationIcon = {
+                    Box {
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menú",
+                                tint = Color.White
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Mi Perfil") },
+                                onClick = {
+                                    showMenu = false
+                                    onNavigateToProfile()
+                                },
+                                leadingIcon = {
+                                    Icon(Icons.Default.AccountCircle, contentDescription = null)
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Cerrar Sesión") },
+                                onClick = {
+                                    showMenu = false
+                                    onLogout()
+                                },
+                                leadingIcon = {
+                                    Icon(Icons.Default.ExitToApp, contentDescription = null)
+                                }
+                            )
+                        }
+                    }
+                },
+                // --- TÍTULO ---
                 title = {
                     Column {
                         Text(
@@ -45,6 +88,7 @@ fun DashboardScreen(
                         )
                     }
                 },
+                // --- ACCESO DIRECTO PERFIL (DERECHA) ---
                 actions = {
                     IconButton(onClick = onNavigateToProfile) {
                         Icon(
@@ -62,15 +106,16 @@ fun DashboardScreen(
         }
     ) { paddingValues ->
 
+        // --- AQUÍ ESTÁ LA CORRECCIÓN DEL FONDO ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 24.dp)
-                .background(Color.White)
+                .background(Color.White) // 1. PRIMERO pintamos el fondo blanco completo
+                .padding(paddingValues) // 2. LUEGO respetamos el espacio de la barra superior
+                .padding(horizontal = 20.dp, vertical = 24.dp) // 3. FINALMENTE margen interno
         ) {
 
-            // ✅ BIENVENIDA GRANDE
+            // BIENVENIDA
             Text(
                 text = "Bienvenido",
                 fontSize = 14.sp,
@@ -86,7 +131,7 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // ✅ TARJETA HISTORIAL
+            // TARJETA HISTORIAL
             MenuCardFinal(
                 title = "Mi historial académico",
                 description = "Estatus, materias y calificaciones.",
@@ -108,7 +153,7 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // ✅ TARJETA PERFIL
+            // TARJETA PERFIL
             MenuCardFinal(
                 title = "Mi perfil",
                 description = "Datos personales y de contacto.",
@@ -130,7 +175,6 @@ fun DashboardScreen(
         }
     }
 }
-
 
 @Composable
 fun MenuCardFinal(

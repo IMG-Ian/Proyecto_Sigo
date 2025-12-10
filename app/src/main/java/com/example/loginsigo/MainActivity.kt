@@ -29,11 +29,12 @@ import androidx.navigation.navArgument
 import com.example.loginsigo.data.model.UserResponse
 import com.example.loginsigo.di.LoginViewModelFactory
 import com.example.loginsigo.ui.login.DashboardScreen
-import com.example.loginsigo.ui.login.HistoryScreen 
+import com.example.loginsigo.ui.login.HistoryScreen
 import com.example.loginsigo.ui.login.LoginViewModel
 import com.example.loginsigo.ui.login.ProfileScreen
 import com.example.loginsigo.ui.theme.UtmGreenPrimary
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 object Routes {
     const val LOGIN = "login_screen"
@@ -65,6 +66,7 @@ fun AppScreenEntry() {
     val factory = LoginViewModelFactory(authRepository)
 
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
 
     NavHost(
         navController = navController,
@@ -99,6 +101,15 @@ fun AppScreenEntry() {
                     },
                     onNavigateToProfile = {
                         navController.navigate(Routes.profile(userJson!!))
+                    },
+                    onLogout = {
+                        scope.launch {
+                            authRepository.logout()
+                            navController.navigate(Routes.LOGIN) {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        }
                     }
                 )
             }
@@ -159,7 +170,7 @@ fun LoginScreen(
     ) {
 
 
-    Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Image(
             painter = painterResource(R.drawable.logo_utm),
