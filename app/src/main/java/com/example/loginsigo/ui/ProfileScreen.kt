@@ -25,13 +25,13 @@ fun ProfileScreen(
     user: UserResponse,
     navController: NavController
 ) {
-    // Estados locales para los campos del formulario (Simulados por ahora)
+
+    // ✅ ESTADOS (API + PROTOTIPO)
     var nombre by remember { mutableStateOf(user.personFullName) }
-    var primerApellido by remember { mutableStateOf("") }
-    var segundoApellido by remember { mutableStateOf("") }
     var curp by remember { mutableStateOf("") }
     var nss by remember { mutableStateOf("") }
-    var sexoSelection by remember { mutableStateOf("Hombre") } // "Hombre" o "Mujer"
+    var sexoSelection by remember { mutableStateOf("Hombre") }
+    var estadoNacimiento by remember { mutableStateOf("Michoacán de Ocampo") }
 
     Scaffold(
         topBar = {
@@ -48,165 +48,144 @@ fun ProfileScreen(
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás", tint = Color.White)
                     }
                 },
-                actions = {
-                    IconButton(onClick = { /* Acción perfil */ }) {
-                        Icon(Icons.Filled.AccountCircle, contentDescription = "Perfil", tint = Color.White)
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = UtmGreenPrimary)
             )
         }
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()), // Habilita el scroll vertical
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
 
+            // ✅ ENCABEZADO
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(50.dp),
                     tint = Color.Gray
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = user.personFullName,
-                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = user.active,
-                    onCheckedChange = null,
-                    colors = CheckboxDefaults.colors(checkedColor = Color.Black)
+                    onCheckedChange = null
                 )
-                Text(text = "Perfil activo", fontWeight = FontWeight.Medium)
+                Text(text = "Perfil activo")
             }
 
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            Divider(modifier = Modifier.padding(vertical = 12.dp))
 
+            // ✅ DATOS SOLO LECTURA (API)
+            ReadOnlyRow("Perfil", user.profileName)
+            ReadOnlyRow("Usuario", user.username)
+            ReadOnlyRow("Correo", user.email)
+            ReadOnlyRow("Roles", user.roles.joinToString())
+            ReadOnlyRow("ID Persona", user.personId.toString())
 
-            ReadOnlyRow(label = "Perfil", value = user.profileName)
-            ReadOnlyRow(label = "Usuario", value = user.username)
-            ReadOnlyRow(label = "Contraseña", value = "CAMBIAR", isLink = true)
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Person, contentDescription = null, tint = Color.Black)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Información Personal",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Gray,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            ProfileTextField(label = "Nombre", value = nombre, onValueChange = { nombre = it })
-            ProfileTextField(label = "Primer apellido", value = primerApellido, onValueChange = { primerApellido = it })
-            ProfileTextField(label = "Segundo apellido", value = segundoApellido, onValueChange = { segundoApellido = it })
-
-
-            Text(text = "Fecha de nacimiento", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                // Día
-                OutlinedTextField(
-                    value = "", onValueChange = {},
-                    modifier = Modifier.weight(1f),
-                    readOnly = true,
-                    colors = inputColors()
-                )
-
-                Box(modifier = Modifier.weight(2f)) {
-                    OutlinedTextField(
-                        value = "Marzo", onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) },
-                        colors = inputColors(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                OutlinedTextField(
-                    value = "", onValueChange = {},
-                    modifier = Modifier.weight(1f),
-                    readOnly = true,
-                    colors = inputColors()
-                )
-            }
-
-            Text(text = "Sexo", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GenderButton(
-                    text = "Hombre",
-                    isSelected = sexoSelection == "Hombre",
-                    onClick = { sexoSelection = "Hombre" }
-                )
-                GenderButton(
-                    text = "Mujer",
-                    isSelected = sexoSelection == "Mujer",
-                    onClick = { sexoSelection = "Mujer" }
-                )
-            }
-
-            Text(text = "Estado de nacimiento", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            OutlinedTextField(
-                value = "Michoacán de Ocampo",
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) },
-                colors = inputColors(),
-                modifier = Modifier.fillMaxWidth()
+            // ✅ TITULO SECCIÓN
+            Text(
+                text = "Información Personal",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = Color.DarkGray
             )
 
-            ProfileTextField(label = "CURP", value = curp, onValueChange = { curp = it })
-            ProfileTextField(label = "Numero de Seguridad Social", value = nss, onValueChange = { nss = it })
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // ✅ CAMPOS EDITABLES
+            ProfileTextField("Nombre completo", nombre) { nombre = it }
+            ProfileTextField("CURP", curp) { curp = it }
+            ProfileTextField("Número de Seguridad Social", nss) { nss = it }
+
+            Text("Sexo", fontWeight = FontWeight.Bold)
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GenderButton("Hombre", sexoSelection == "Hombre") { sexoSelection = "Hombre" }
+                GenderButton("Mujer", sexoSelection == "Mujer") { sexoSelection = "Mujer" }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text("Estado de nacimiento", fontWeight = FontWeight.Bold)
+
+            OutlinedTextField(
+                value = estadoNacimiento,
+                onValueChange = { estadoNacimiento = it },
+                modifier = Modifier.fillMaxWidth(),
+                colors = inputColors()
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
+
+            // ✅ BOTÓN GUARDAR (PROTOTIPO)
+            Button(
+                onClick = {
+                    println("Nombre: $nombre")
+                    println("CURP: $curp")
+                    println("NSS: $nss")
+                    println("Sexo: $sexoSelection")
+                    println("Estado: $estadoNacimiento")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = UtmGreenPrimary)
+            ) {
+                Text("Guardar cambios", fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
 
 
+// ======================
+// ✅ COMPONENTES REUTILIZABLES
+// ======================
+
 @Composable
 fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Unit) {
-    Column(modifier = Modifier.padding(bottom = 8.dp)) {
-        Text(text = label, fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(bottom = 4.dp))
+    Column {
+        Text(label, fontWeight = FontWeight.Bold, fontSize = 14.sp)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             colors = inputColors(),
-            shape = RoundedCornerShape(4.dp)
+            shape = RoundedCornerShape(6.dp)
         )
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
 @Composable
-fun ReadOnlyRow(label: String, value: String, isLink: Boolean = false) {
+fun ReadOnlyRow(label: String, value: String) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, fontWeight = FontWeight.Medium, color = Color.Gray)
-        Text(
-            text = value,
-            fontWeight = FontWeight.Medium,
-            color = if (isLink) Color.Gray else Color.Black // "CAMBIAR" en gris oscuro
-        )
+        Text(text = label, color = Color.Gray)
+        Text(text = value, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -215,10 +194,9 @@ fun GenderButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) UtmGreenPrimary else Color(0xFF4DB6AC).copy(alpha = 0.7f)
+            containerColor = if (isSelected) UtmGreenPrimary else Color(0xFF80CBC4)
         ),
-        shape = RoundedCornerShape(8.dp),
-        contentPadding = PaddingValues(horizontal = 24.dp)
+        shape = RoundedCornerShape(8.dp)
     ) {
         Text(text = text, color = Color.White)
     }
