@@ -40,7 +40,7 @@ fun HistoryScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { /* Menú o atrás */ navController.popBackStack() }) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "Menú", tint = Color.White)
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Menú", tint = Color.White)
                     }
                 },
                 actions = {
@@ -80,7 +80,7 @@ fun HistoryScreen(
                     .fillMaxWidth()
                     .shadow(4.dp, RoundedCornerShape(12.dp)),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F6FA)) // Fondo gris muy suave/lila
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F6FA))
             ) {
                 Column {
 
@@ -98,7 +98,7 @@ fun HistoryScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Color(0xFF26C6DA)), // Cian turquesa
+                                    .background(Color(0xFF26C6DA)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
@@ -123,12 +123,12 @@ fun HistoryScreen(
                             }
                         }
 
-                        // Botón "+" Cuadrado Grande a la derecha
+
                         Box(
                             modifier = Modifier
                                 .width(60.dp)
                                 .height(50.dp)
-                                .offset(x = 0.dp, y = (-16).dp) // Pequeño ajuste para pegarlo arriba
+                                .offset(x = 0.dp, y = (-16).dp)
                                 .background(
                                     color = UtmGreenPrimary,
                                     shape = RoundedCornerShape(bottomStart = 8.dp)

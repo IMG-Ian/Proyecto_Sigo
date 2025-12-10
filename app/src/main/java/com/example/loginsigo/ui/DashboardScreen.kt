@@ -31,19 +31,17 @@ fun DashboardScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = user.username.ifBlank { "UTM Alumno" },
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { /* Acciones para el botón de menú */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Menú",
-                            tint = Color.White
+                    Column {
+                        Text(
+                            text = "SIGO UTM",
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.8f)
+                        )
+                        Text(
+                            text = user.username.ifBlank { "Alumno UTM" },
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
                     }
                 },
@@ -52,7 +50,8 @@ fun DashboardScreen(
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = "Perfil",
-                            tint = Color.White
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 },
@@ -62,63 +61,79 @@ fun DashboardScreen(
             )
         }
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(24.dp)
-                .background(Color.White), // Fondo limpio
-            horizontalAlignment = Alignment.Start
+                .padding(horizontal = 20.dp, vertical = 24.dp)
+                .background(Color.White)
         ) {
+
+            // ✅ BIENVENIDA GRANDE
             Text(
-                text = "Bienvenido ${user.personFullName.split(" ").firstOrNull() ?: ""}",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Normal,
-                color = Color.DarkGray,
-                modifier = Modifier.padding(bottom = 24.dp)
+                text = "Bienvenido",
+                fontSize = 14.sp,
+                color = Color.Gray
             )
 
-            MenuCard(
+            Text(
+                text = user.personFullName.split(" ").firstOrNull() ?: "",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // ✅ TARJETA HISTORIAL
+            MenuCardFinal(
                 title = "Mi historial académico",
                 description = "Estatus, materias y calificaciones.",
-                icon = Icons.Default.DateRange, // Icono calendario
-                iconColor = Color(0xFFE8F5E9), // Fondo suave para el icono (Verde claro)
+                icon = Icons.Default.DateRange,
+                iconColor = Color(0xFFE8F5E9),
                 iconTint = UtmGreenPrimary,
                 onClick = onNavigateToHistory
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Consulta periódicamente tu historial y mantente pendiente de tu estatus académico.",
-                style = MaterialTheme.typography.bodySmall,
+                text = "Consulta periódicamente tu historial y mantente\n" +
+                        "pendiente de tu estatus académico.",
+                fontSize = 12.sp,
                 color = Color.Gray,
-                modifier = Modifier.padding(bottom = 24.dp)
+                modifier = Modifier.padding(start = 6.dp)
             )
 
+            Spacer(modifier = Modifier.height(28.dp))
 
-            MenuCard(
+            // ✅ TARJETA PERFIL
+            MenuCardFinal(
                 title = "Mi perfil",
-                description = "Datos personales, de contacto y más.",
+                description = "Datos personales y de contacto.",
                 icon = Icons.Default.Person,
-                iconColor = Color(0xFFE3F2FD), // Fondo suave (Azul claro o lila como el mockup)
-                iconTint = Color(0xFF42A5F5), // Azul
+                iconColor = Color(0xFFE3F2FD),
+                iconTint = Color(0xFF1E88E5),
                 onClick = onNavigateToProfile
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Valida tu información personal y mantenla siempre actualizada.",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                text = "Consulta periódicamente tu historial y mantente\n" +
+                        "pendiente de tu estatus académico.",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(start = 6.dp)
             )
         }
     }
 }
 
+
 @Composable
-fun MenuCard(
+fun MenuCardFinal(
     title: String,
     description: String,
     icon: ImageVector,
@@ -131,22 +146,22 @@ fun MenuCard(
             .fillMaxWidth()
             .height(110.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF9F9F9)
+            containerColor = Color(0xFFF8F8F8)
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(52.dp)
                     .clip(CircleShape)
                     .background(iconColor),
                 contentAlignment = Alignment.Center
@@ -155,30 +170,35 @@ fun MenuCard(
                     imageVector = icon,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(26.dp)
                 )
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+
+                Spacer(modifier = Modifier.height(6.dp))
+
                 Text(
                     text = description,
-                    style = MaterialTheme.typography.bodySmall,
+                    fontSize = 12.sp,
                     color = Color.Gray,
                     lineHeight = 16.sp
                 )
             }
+
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = null,
+                tint = Color.Gray
+            )
         }
     }
 }
