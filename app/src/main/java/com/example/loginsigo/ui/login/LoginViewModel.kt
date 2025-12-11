@@ -28,11 +28,15 @@ class LoginViewModel(
     val uiState: StateFlow<LoginUiState> = _uiState
 
     fun onUsernameChange(newUsername: String) {
-        _uiState.value = _uiState.value.copy(username = newUsername, errorMessage = null)
+        _uiState.value = _uiState.value.copy(
+            username = newUsername.uppercase(),
+            errorMessage = null)
     }
 
     fun onPasswordChange(newPassword: String) {
-        _uiState.value = _uiState.value.copy(password = newPassword, errorMessage = null)
+        _uiState.value = _uiState.value.copy(
+            password = newPassword.uppercase(),
+            errorMessage = null)
     }
 
     fun login() {
