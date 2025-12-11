@@ -35,7 +35,7 @@ class LoginViewModel(
 
     fun onPasswordChange(newPassword: String) {
         _uiState.value = _uiState.value.copy(
-            password = newPassword.uppercase(),
+            password = newPassword,
             errorMessage = null)
     }
 
